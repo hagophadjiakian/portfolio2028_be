@@ -1,7 +1,5 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from pathlib import Path
 from app.routes import contact
 
 app = FastAPI(
@@ -24,13 +22,8 @@ app.add_middleware(
 
 app.include_router(contact.router, prefix="/api", tags=["contact"])
 
-# Serve static files from assets folder
-assets_path = Path(__file__).parent.parent / "assets"
-try:
-    if assets_path.exists():
-        app.mount("/assets", StaticFiles(directory=str(assets_path)), name="assets")
-except Exception as e:
-    print(f"Warning: Could not mount assets: {e}")
+# Assets are now served from the frontend
+# Static file serving removed to reduce backend memory usage
 
 
 @app.get("/")
