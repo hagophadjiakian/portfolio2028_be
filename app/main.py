@@ -26,8 +26,11 @@ app.include_router(contact.router, prefix="/api", tags=["contact"])
 
 # Serve static files from assets folder
 assets_path = Path(__file__).parent.parent / "assets"
-if assets_path.exists():
-    app.mount("/assets", StaticFiles(directory=str(assets_path)), name="assets")
+try:
+    if assets_path.exists():
+        app.mount("/assets", StaticFiles(directory=str(assets_path)), name="assets")
+except Exception as e:
+    print(f"Warning: Could not mount assets: {e}")
 
 
 @app.get("/")
